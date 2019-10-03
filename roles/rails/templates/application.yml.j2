@@ -1,0 +1,17 @@
+##
+## This file is maintained by Ansible - CHANGES WILL BE OVERWRITTEN
+##
+DATABASE_URL: postgres://{{ database_user }}:{{ database_password }}@{{ database_hostname }}/{{ database_name }}
+SECRET_KEY_BASE: {{ secret_key_base }}
+RAILS_ENV: {{ env }}
+RAILS_MAX_THREADS: {{ rails_max_threads }}
+WEB_CONCURRENCY: {{ web_concurrency }}
+APPLICATION_NAME: {{ app_name }}
+DOMAIN: {{ domain }}
+SMTP_USERNAME: {{ smtp_user_name }}
+SMTP_PASSWORD: {{ smtp_password }}
+SMTP_ADDRESS: {{ smtp_address }}
+SMTP_DOMAIN: {{ smtp_domain }}
+SMTP_PORT: "{{ smtp_port }}"
+SMTP_AUTHENTICATION: {{ smtp_authentication }}
+SENTRY_DSN: {{ sentry_dsn }}

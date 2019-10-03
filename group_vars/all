@@ -5,8 +5,11 @@ app_name: consul
 server_hostname: "{{ domain | default(ansible_default_ipv4.address) }}"
 secret_key_base: "change_me"
 
+consul_repo: https://github.com/digidemlab/consul.git
+consul_branch: vps
+
 # Server Timzone + Locale
-timezone: Europe/Madrid
+timezone: Europe/Stockholm
 locale: en_US.UTF-8
 
 # General settings
@@ -17,19 +20,11 @@ deploy_dir: "/home/{{ deploy_user }}/"
 deploy_password: test
 deploy_app_name: test
 deploy_server_hostname: 127.0.0.1
-shared_dirs:
-  - releases
-  - repo
-  - shared
-  - shared/config
-  - shared/log
-  - shared/public
-  - shared/tmp
 
 ssh_public_key_path: "~/.ssh/id_rsa.pub"
 
 # Ruby
-ruby_version: 2.3.2
+ruby_version: 2.3.8
 
 #Ruby
 rvm1_user: "{{ deploy_user }}"
@@ -42,6 +37,10 @@ database_password: "{{ deploy_user }}"
 database_hostname: "localhost"
 database_port: 5432
 
+# Puma threads and workers
+rails_max_threads: "5"
+web_concurrency: "2"
+
 #SMTP
 smtp_address:        "smtp.example.com"
 smtp_port:           25
@@ -49,6 +48,8 @@ smtp_domain:         "your_domain.com"
 smtp_user_name:      "username"
 smtp_password:       "password"
 smtp_authentication: "plain"
+
+sentry_dsn: "change_me"
 
 #LetsEncrypt
 #letsencrypt_email: "your_email@example.com"

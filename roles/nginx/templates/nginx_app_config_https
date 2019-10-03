@@ -18,7 +18,7 @@ server {
 
   server_name {{ deploy_server_hostname }};
 
-  root {{ deploy_dir  }}{{ deploy_app_name }}/current/public;
+  root {{ deploy_dir  }}{{ deploy_app_name }}/{{ app_name }};
   try_files $uri/index.html $uri @puma_production;
 
   ssl on;
@@ -53,8 +53,8 @@ server {
     proxy_set_header X-Forwarded-Proto https;
     proxy_pass http://puma_production;
 
-    access_log {{ deploy_dir  }}{{ deploy_app_name }}/shared/log/nginx.access.log;
-    error_log {{ deploy_dir  }}{{ deploy_app_name }}/shared/log/nginx.error.log;
+    access_log {{ deploy_dir  }}{{ deploy_app_name }}/{{ app_name }}/log/nginx.access.log;
+    error_log {{ deploy_dir  }}{{ deploy_app_name }}/{{ app_name }}/log/nginx.error.log;
   }
 
   location ^~ /assets/ {

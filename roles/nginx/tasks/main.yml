@@ -1,8 +1,28 @@
 ---
-- name: Install Nginx
-  apt: 
-    name: nginx 
-    state: latest
+- name: apt public key for nginx
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 561F9B9CAC40B2F7
+    state: present
+
+- name: add nginx/passenger package repo
+  apt_repository:
+    repo: "deb https://oss-binaries.phusionpassenger.com/apt/passenger xenial main"
+    state: present
+
+- name: Install nginx
+  apt:
+    pkg:
+      - nginx
+      - nginx-extras
+      - passenger
+    update_cache: yes
+
+- name: add rate limiting
+  copy:
+    dest: /etc/nginx/conf.d/consul-rate-limit.conf
+    content: |
+      limit_req_zone $binary_remote_addr zone=one:10m rate=5r/s;
 
 - name: Add default virtual host
   template:
@@ -11,8 +31,28 @@
     owner: "{{ deploy_user }}"
     group: wheel
 
+- name: enable passenger.conf
+  lineinfile:
+    path: /etc/nginx/nginx.conf
+    regexp: 'include /etc/nginx/passenger.conf;'
+    line: "include /etc/nginx/passenger.conf;"
+
+- name: change passenger ruby
+  lineinfile:
+    path: /etc/nginx/passenger.conf
+    regexp: 'passenger_ruby'
+    line: "passenger_ruby /home/{{ deploy_user }}/.rvm/wrappers/ruby-{{ ruby_version }}/ruby;"
+
 - name: Restart Nginx
   service:
     name: nginx
     state: restarted
     enabled: true
+
+- name: Change user permissions for log files
+  file:
+    path: /home/{{ deploy_user }}/{{ app_name }}/log
+    owner: "{{ deploy_user }}"
+    group: wheel
+    recurse: true
+    mode: 0777

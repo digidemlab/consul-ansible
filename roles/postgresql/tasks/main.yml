@@ -5,6 +5,7 @@
     name:
       - postgresql
       - postgresql-contrib
+      - python3-psycopg2
       - python-psycopg2
 
 - name: Start Postgres
