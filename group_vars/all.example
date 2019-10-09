@@ -1,9 +1,10 @@
 ---
-app_name: consul
-#domain: your_domain.com
+app_name: test
+parent_domain: example.com
+domain: "{{ app_name }}.{{ parent_domain }}"
 
 server_hostname: "{{ domain | default(ansible_default_ipv4.address) }}"
-secret_key_base: "change_me"
+secret_key_base: change_me
 
 consul_repo: https://github.com/digidemlab/consul.git
 consul_branch: vps
@@ -25,31 +26,43 @@ ssh_public_key_path: "~/.ssh/id_rsa.pub"
 
 # Ruby
 ruby_version: 2.3.8
-
-#Ruby
 rvm1_user: "{{ deploy_user }}"
 rvm1_rubies: ["ruby-{{ ruby_version }}"]
 
-#Postgresql
+# Postgresql
 database_name: "consul_{{ env }}"
 database_user: "{{ deploy_user }}"
 database_password: "{{ deploy_user }}"
 database_hostname: "localhost"
 database_port: 5432
 
+# Redis
+redis_listen_address: '127.0.0.1'
+redis_listen_port: '6379'
+
 # Puma threads and workers
 rails_max_threads: "5"
 web_concurrency: "2"
 
-#SMTP
-smtp_address:        "smtp.example.com"
-smtp_port:           25
-smtp_domain:         "your_domain.com"
-smtp_user_name:      "username"
-smtp_password:       "password"
+# SMTP
+smtp_address:        change_me
+smtp_port:           587
+smtp_domain:         {{ parent_domain }}
+smtp_user_name:      change_me
+smtp_password:       change_me
 smtp_authentication: "plain"
 
-sentry_dsn: "change_me"
+# Sentry
+sentry_dsn: change_me
 
-#LetsEncrypt
-#letsencrypt_email: "your_email@example.com"
+# Let's Encrypt
+letsencrypt_email: change_me
+
+# Hetzner token
+hetzner_token: change_me
+
+# Gandi
+production_api_key: change_me
+
+# Matomo auth token
+matomo_token: change_me

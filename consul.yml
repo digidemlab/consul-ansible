@@ -1,5 +1,48 @@
 ---
-- import_playbook: user.yml
-- import_playbook: system.yml
-- import_playbook: db.yml
-- import_playbook: app.yml
+- name: Provision the server on Hetzner
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+    ansible_python_interpreter: /usr/local/bin/python3
+  roles:
+    - hetzner
+    - gandi
+    - matomo
+
+- name: Create deploy user
+  hosts: all
+  become: yes
+  vars:
+    ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
+    ansible_ssh_private_key_file: '~/.ssh/id_rsa'
+    ansible_port: 22
+  roles:
+    - { role: user, when: root_access == true }
+
+- name: Set up system, db and CONSUL
+  hosts: all
+  become: true
+  vars:
+    ansible_user: "{{ deploy_user }}"
+    ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
+    ansible_ssh_private_key_file: '~/.ssh/id_rsa'
+    ansible_port: 22
+  roles:
+    - system
+    - postgresql
+    - ruby
+    - rails
+    - letsencrypt
+    - nginx
+    - memcached
+    - timezone
+    - specs
+
+- name: Check system
+  hosts: all
+  become: true
+  vars:
+    ansible_user: "{{ deploy_user }}"
+  roles:
+    - specs

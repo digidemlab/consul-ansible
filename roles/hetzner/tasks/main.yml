@@ -1,0 +1,23 @@
+---
+- name: Install hcloud-python
+  pip:
+    name: hcloud
+  become: True
+
+- name: Create a basic server
+  hcloud_server:
+      api_token: "{{ hetzner_token }}"
+      name: "consul-{{ app_name }}"
+      server_type: cx11
+      image: ubuntu-16.04
+      location: hel1
+      ssh_keys:
+      - macbook
+      state: present
+  register: server
+  become: True
+
+- name: Save server IP
+  add_host:
+    name: "{{ server.hcloud_server.ipv4_address }}"
+    groups: all
