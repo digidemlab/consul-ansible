@@ -1,15 +1,15 @@
 ---
 - name: Check if website already exists on Matomo
   uri:
-    url: "https://matomo.digidemlab.org?module=API&method=SitesManager.getSitesIdFromSiteUrl&url=https://{{ domain }}&format=json&token_auth={{ matomo_token }}"
-    status_code: 200
+    url: "{{ matomo_server_address }}?module=API&method=SitesManager.getSitesIdFromSiteUrl&url=https://{{ domain }}&format=json&token_auth={{ matomo_token }}"
     method: GET
+    status_code: 200
   register: response
   become_user: True
 
 - name: Create new website on Matomo
   uri:
-    url: "https://matomo.digidemlab.org?module=API&method=SitesManager.addSite&siteName=consul-{{ app_name }}&urls[0]=https://{{ domain }}&timezone=Europe/Stockholm&format=json&token_auth={{ matomo_token }}"
+    url: "{{ matomo_server_address }}?module=API&method=SitesManager.addSite&siteName=consul-{{ app_name }}&urls[0]=https://{{ domain }}&timezone=Europe/Stockholm&format=json&token_auth={{ matomo_token }}"
     method: GET
     status_code: 200
   become_user: True
@@ -18,7 +18,7 @@
 
 - name: Update existing website on Matomo
   uri:
-    url: "https://matomo.digidemlab.org?module=API&method=SitesManager.updateSite&idSite={{ response.json[0].idsite }}&siteName=consul-{{ app_name }}&urls[0]=https://{{ domain }}&timezone=Europe/Stockholm&format=json&token_auth={{ matomo_token }}"
+    url: "{{ matomo_server_address }}?module=API&method=SitesManager.updateSite&idSite={{ response.json[0].idsite }}&siteName=consul-{{ app_name }}&urls[0]=https://{{ domain }}&timezone=Europe/Stockholm&format=json&token_auth={{ matomo_token }}"
     method: GET
     status_code: 200
   become_user: True

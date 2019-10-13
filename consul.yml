@@ -1,6 +1,6 @@
 ---
 - name: Provision the server on Hetzner
-  hosts: localhost
+  hosts: 127.0.0.1
   connection: local
   gather_facts: False
   vars:
@@ -9,6 +9,7 @@
     - hetzner
     - gandi
     - matomo
+    - sentry
 
 - name: Create deploy user
   hosts: all
@@ -33,6 +34,7 @@
     - postgresql
     - ruby
     - rails
+    - redis
     - letsencrypt
     - nginx
     - memcached

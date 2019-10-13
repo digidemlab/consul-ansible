@@ -2,6 +2,11 @@
 - name: gather facts
   setup:
 
+- name: Get facts from local roles
+  set_fact:
+    matomo_site_id: "{{ hostvars['127.0.0.1'].matomo_site_id }}"
+    sentry_dsn: "{{ hostvars['127.0.0.1'].sentry_dsn }}"
+
 - name: Update and upgrade apt packages (this may take a few minutes)
   become: true
   become_method: sudo
