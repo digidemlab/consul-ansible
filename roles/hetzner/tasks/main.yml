@@ -20,6 +20,7 @@
       location: hel1
       ssh_keys:
       - macbook
+      - jenkins
       state: present
   register: server
   become: True
