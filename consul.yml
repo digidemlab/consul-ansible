@@ -2,7 +2,7 @@
 - name: Provision the server on Hetzner
   hosts: 127.0.0.1
   connection: local
-  gather_facts: False
+  gather_facts: True
   roles:
     - hetzner
     - gandi
