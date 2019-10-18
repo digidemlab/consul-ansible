@@ -2,7 +2,9 @@
 - name: Provision the server on Hetzner
   hosts: 127.0.0.1
   connection: local
-  gather_facts: True
+  gather_facts: False
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
   roles:
     - hetzner
     - gandi
